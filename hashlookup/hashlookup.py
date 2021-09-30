@@ -55,6 +55,8 @@ class HashLookupInsert:
         hashtype = hashtype.upper()
         if not(hashtype in self.known_hashtypes):
             return False
+        if hashtype in ['SHA-1', 'MD5', 'SHA-256']:
+            value = value.upper()
         self.record[hashtype] = value 
 
     def add_meta(self, key=None, value=None, validate=True):
