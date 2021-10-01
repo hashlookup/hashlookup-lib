@@ -12,11 +12,13 @@ import redis
 import time
 
 class HashLookupInsert:
-    def __init__(self, update=True, validate=True, PubSubInsert=False, host='127.0.0.1', port=6666):
+    def __init__(self, update=True, validate=True, PubSubInsert=False, source=None, host='127.0.0.1', port=6666):
         self.update = update
         self.parent = []
         self.children = []
         self.record = {}
+        if source is not None:
+            self.record['source'] = source
         self.rdb = redis.Redis(host=host, port=port, decode_responses=True)
         self.known_hashtypes = ['SHA-1', 'MD5', 'SHA-256', 'TLSH', 'SSDEEP']
         self.known_meta = ['FileName', 'FileSize', 'CRC', 'SpecialCode', 'OpSystemCode', 'ProductCode', 'PackageName', 'PackageMaintainer', 'PackageSection', 'PackageVersion', 'KnownMalicious', 'source', 'db']
@@ -105,7 +107,7 @@ class HashLookupInsert:
 
         
 if __name__ == "__main__":
-    h = HashLookupInsert(update=False)
+    h = HashLookupInsert(update=False, source='lib-test')
     h.add_hash()
     h.add_hash(value='e7793f15c2ff7e747b4bc7079f5cd4f7', hashtype='Md5')
     h.add_hash(value='732458574c63c3790cad093a36eadfb990d11ee6', hashtype='sha-1')
