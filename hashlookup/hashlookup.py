@@ -24,7 +24,7 @@ class HashLookupInsert:
             self.source = source
             self.record['source'] = self.source
         self.rdb = redis.Redis(host=host, port=port, decode_responses=True)
-        self.known_hashtypes = ['SHA-1', 'MD5', 'SHA-256', 'TLSH', 'SSDEEP']
+        self.known_hashtypes = ['SHA-1', 'MD5', 'SHA-256', 'SHA-512', 'TLSH', 'SSDEEP']
         self.known_meta = ['FileName', 'FileSize', 'CRC', 'SpecialCode', 'OpSystemCode', 'ProductCode', 'PackageName', 'PackageMaintainer', 'PackageSection', 'PackageVersion', 'KnownMalicious', 'source', 'db']
 
     def cleanup(self):
