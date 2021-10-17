@@ -13,13 +13,14 @@ import time
 import json
 
 class HashLookupInsert:
-    def __init__(self, update=True, validate=True, publish=False, channel='hashlookup-insert', source=None, host='127.0.0.1', port=6666):
+    def __init__(self, update=True, skipexists=False, validate=True, publish=False, channel='hashlookup-insert', source=None, host='127.0.0.1', port=6666):
         self.update = update
         self.parent = []
         self.children = []
         self.record = {}
         self.publish =  publish
         self.channel =  channel
+        self.skipexists = skipexists
         if source is not None:
             self.source = source
             self.record['source'] = self.source
@@ -91,14 +92,20 @@ class HashLookupInsert:
     def insert(self):
         self.none = '' 
         self.record['insert-timestamp'] = time.time()
+        if self.skipexists:
+            if self.rdb.exists("h:{}".format(self.record['SHA-1'])):
+                    self.cleanup()
+                    return False
         if not 'SHA-1' in self.record:
             return False
         if not self.update:
-            self.rdb.delete("l:{}".format(self.record['MD5']))
+            if 'MD5' in self.record:
+                self.rdb.delete("l:{}".format(self.record['MD5']))
             self.rdb.delete("h:{}".format(self.record['SHA-1']))
             if 'SHA-256' in self.record:
                 self.rdb.delete("l:{}".format(self.record['SHA-256']))
-        self.rdb.set("l:{}".format(self.record['MD5']), self.record['SHA-1'])
+        if 'MD5' in self.record:
+            self.rdb.set("l:{}".format(self.record['MD5']), self.record['SHA-1'])
         if 'SHA-256' in self.record:
             self.rdb.set("l:{}".format(self.record['SHA-256']), self.record['SHA-1'])
         self.rdb.hmset("h:{}".format(self.record['SHA-1']), self.record)
@@ -125,4 +132,6 @@ if __name__ == "__main__":
     h.add_hash(value='1e39354a6e481dac48375bfebb126fd96aed4e23bab3c53ed6ecf1c5e4d5736d', hashtype='SHa-256')
     h.add_hash(value='732458574c63c3790cad093a36eadfb990d11ee6', hashtype='sha-1')
     h.insert()
-    
+    h = HashLookupInsert(update=True, source='lib-test', publish=True, skipexists=True)
+    h.add_hash(value='732458574c63c3790cad093a36eadfb990d11ee6', hashtype='sha-1')
+    h.insert()
