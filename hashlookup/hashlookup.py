@@ -137,9 +137,13 @@ class HashLookupInsert:
         for parent in self.parent:
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), parent)
             self.rdb.sadd("c:{}".format(parent), self.record["SHA-1"])
+            if not self.rdb.exists("h:{}".format(parent)):
+                self.rdb.hset("h:{}".format(parent), key="SHA-1", value=parent)
         for child in self.children:
             self.rdb.sadd("c:{}".format(child), self.record["SHA-1"])
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), child)
+            if not self.rdb.exists("h:{}".format(child)):
+                self.rdb.hset("h:{}".format(child), key="SHA-1", value=child)
         if self.publish:
             self.rdb.publish(self.channel, json.dumps(self.record))
         print(self.record)
