@@ -110,7 +110,7 @@ class HashLookupInsert:
     def add_children(self, value=None):
         h = self.check_sha1(value=value)
         if h:
-            self.children.append(value)
+            self.children.append(h)
         else:
             return False
 
@@ -136,8 +136,10 @@ class HashLookupInsert:
         self.rdb.hmset("h:{}".format(self.record["SHA-1"]), self.record)
         for parent in self.parent:
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), parent)
+            self.rdb.sadd("c:{}".format(parent), self.record["SHA-1"])
         for child in self.children:
             self.rdb.sadd("c:{}".format(child), self.record["SHA-1"])
+            self.rdb.sadd("p:{}".format(self.record["SHA-1"]), child)
         if self.publish:
             self.rdb.publish(self.channel, json.dumps(self.record))
         print(self.record)
@@ -159,6 +161,7 @@ if __name__ == "__main__":
     )
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
     h.insert()
-    h = HashLookupInsert(update=True, source="lib-test", publish=True, skipexists=True)
+    h = HashLookupInsert(update=True, source="lib-test", publish=True, skipexists=False)
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
+    h.add_parent(value="d0235872b0f5d50cd9ce789690249fac3ceb9045")
     h.insert()
