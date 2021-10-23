@@ -32,8 +32,8 @@ class HashLookupInsert:
         self.publish = publish
         self.channel = channel
         self.skipexists = skipexists
+        self.source = source
         if source is not None:
-            self.source = source
             self.record["source"] = self.source
         self.rdb = redis.Redis(host=host, port=port, decode_responses=True)
         self.known_hashtypes = ["SHA-1", "MD5", "SHA-256", "SHA-512", "TLSH", "SSDEEP"]
