@@ -6,7 +6,7 @@ Hashlookup is a library to import hashes records into a hashlookup server.
 __author__ = "Alexandre Dulaunoy"
 __copyright__ = "Copyright 2021, Alexandre Dulaunoy"
 __license__ = "MIT License"
-__version__ = "0.9"
+__version__ = "1.0"
 
 import redis
 import time
@@ -27,6 +27,7 @@ class HashLookupInsert:
     ):
         self.update = update
         self.parent = []
+        self.parent_meta = {}
         self.children = []
         self.record = {}
         self.publish = publish
@@ -107,6 +108,13 @@ class HashLookupInsert:
         else:
             return False
 
+    def add_parent_meta(self, value=None, meta_key=None, meta_value=None):
+        h = self.check_sha1(value=value)
+        if meta_key is None or meta_value is None or value is None:
+            return False
+        self.parent_meta[h] = []
+        self.parent_meta[h].append({meta_key: meta_value})
+
     def add_children(self, value=None):
         h = self.check_sha1(value=value)
         if h:
@@ -139,6 +147,10 @@ class HashLookupInsert:
             self.rdb.sadd("c:{}".format(parent), self.record["SHA-1"])
             if not self.rdb.exists("h:{}".format(parent)):
                 self.rdb.hset("h:{}".format(parent), key="SHA-1", value=parent)
+        for key in self.parent_meta:
+            for k in self.parent_meta[key]:
+                for kparent in k.keys():
+                    self.rdb.hset("h:{}".format(key), key=kparent, value=k[kparent])
         for child in self.children:
             self.rdb.sadd("c:{}".format(child), self.record["SHA-1"])
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), child)
@@ -168,4 +180,5 @@ if __name__ == "__main__":
     h = HashLookupInsert(update=True, source="lib-test", publish=True, skipexists=False)
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
     h.add_parent(value="d0235872b0f5d50cd9ce789690249fac3ceb9045")
+    h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="original-finame", meta_value="foobar")
     h.insert()
