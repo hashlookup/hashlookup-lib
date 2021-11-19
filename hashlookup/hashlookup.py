@@ -112,7 +112,8 @@ class HashLookupInsert:
         h = self.check_sha1(value=value)
         if meta_key is None or meta_value is None or value is None:
             return False
-        self.parent_meta[h] = []
+        if h not in self.parent_meta:
+            self.parent_meta[h] = []
         self.parent_meta[h].append({meta_key: meta_value})
 
     def add_children(self, value=None):
@@ -180,5 +181,6 @@ if __name__ == "__main__":
     h = HashLookupInsert(update=True, source="lib-test", publish=True, skipexists=False)
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
     h.add_parent(value="d0235872b0f5d50cd9ce789690249fac3ceb9045")
-    h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="original-finame", meta_value="foobar")
+    h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="original-filename", meta_value="foobar")
+    h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="bar", meta_value="foo")
     h.insert()
