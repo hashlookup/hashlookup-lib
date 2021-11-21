@@ -42,6 +42,7 @@ class HashLookupInsert:
             "FileName",
             "FileSize",
             "CRC",
+            "CRC32",
             "SpecialCode",
             "OpSystemCode",
             "ProductCode",
@@ -52,6 +53,11 @@ class HashLookupInsert:
             "KnownMalicious",
             "source",
             "db",
+            "mimetype",
+            "tar:gname",
+            "tar:uname",
+            "nsrl-sha256",
+            "insert-timestamp"
         ]
 
     def cleanup(self):
