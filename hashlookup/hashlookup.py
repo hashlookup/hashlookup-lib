@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 """
 Hashlookup is a library to import hashes records into a hashlookup server.
+
+The library cleans up the format in the entry, do normalization such as upper-case of hex hashes,
+verify meta-field definition and ensure consistency in the key/value store.
+
+A hashlookup server is a Redis-compatible datastore.
+
 """
 
 __author__ = "Alexandre Dulaunoy"
 __copyright__ = "Copyright 2021, Alexandre Dulaunoy"
-__license__ = "MIT License"
+__license__ = "AGPL License"
 __version__ = "1.0"
 
 import redis
@@ -61,6 +67,7 @@ class HashLookupInsert:
         ]
 
     def cleanup(self):
+        """Cleanup the record after this has been inserted in the hashlookup store."""
         self.parent = []
         self.children = []
         self.record = {}
@@ -68,6 +75,7 @@ class HashLookupInsert:
             self.record["source"] = self.source
 
     def is_hex(self, s):
+        """Check if the string is expressed in hexadecimal."""
         try:
             int(s, 16)
             return True
@@ -75,6 +83,7 @@ class HashLookupInsert:
             return False
 
     def check_md5(self, value=None):
+        """Check if the value match a hexadecimal representation of an MD5 hash."""
         if value is None or len(value) != 32:
             return False
         if not self.is_hex(value):
@@ -83,6 +92,7 @@ class HashLookupInsert:
         return k
 
     def check_sha1(self, value=None):
+        """Check if the value match a hexadecimal representation of an SHA1 hash."""
         if value is None or len(value) != 40:
             return False
         if not self.is_hex(value):
@@ -91,6 +101,7 @@ class HashLookupInsert:
         return k
 
     def add_hash(self, value=None, hashtype=None):
+        """Add a hexadecimal representation of hash."""
         if value is None or hashtype is None:
             return False
         hashtype = hashtype.upper()
@@ -101,6 +112,7 @@ class HashLookupInsert:
         self.record[hashtype] = value
 
     def add_meta(self, key=None, value=None, validate=True):
+        """Add a meta field to the record. The field name is checked against the list of known meta fields."""
         if key is None or value is None:
             return False
         if not (key in self.known_meta):
@@ -108,6 +120,7 @@ class HashLookupInsert:
         self.record[key] = value
 
     def add_parent(self, value=None):
+        """Add a parent (in SHA-1 hexadecimal representation) to the current record."""
         h = self.check_sha1(value=value)
         if h:
             self.parent.append(h)
@@ -115,6 +128,7 @@ class HashLookupInsert:
             return False
 
     def add_parent_meta(self, value=None, meta_key=None, meta_value=None):
+        """Add a parent meta to the current record. It will the parent record with the associated meta fields."""
         h = self.check_sha1(value=value)
         if meta_key is None or meta_value is None or value is None:
             return False
@@ -123,6 +137,7 @@ class HashLookupInsert:
         self.parent_meta[h].append({meta_key: meta_value})
 
     def add_children(self, value=None):
+        """Add a child (in SHA-1 hexadecimal representation to the current record."""
         h = self.check_sha1(value=value)
         if h:
             self.children.append(h)
@@ -130,6 +145,7 @@ class HashLookupInsert:
             return False
 
     def insert(self):
+        """Insert the record in the hashlookup store. The associated structures are updated according the hashlookup data-structure backend."""
         self.none = ""
         self.record["insert-timestamp"] = time.time()
         if self.skipexists:
