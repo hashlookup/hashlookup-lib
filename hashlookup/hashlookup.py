@@ -165,8 +165,9 @@ class HashLookupInsert:
                 self.rdb.hset("h:{}".format(child), key="SHA-1", value=child)
         if self.publish:
             self.rdb.publish(self.channel, json.dumps(self.record))
-        print(self.record)
+        r = self.record
         self.cleanup()
+        return(r)
 
 
 if __name__ == "__main__":
