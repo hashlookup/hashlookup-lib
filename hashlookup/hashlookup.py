@@ -163,6 +163,8 @@ class HashLookupInsert:
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), child)
             if not self.rdb.exists("h:{}".format(child)):
                 self.rdb.hset("h:{}".format(child), key="SHA-1", value=child)
+        if 'mimetype' in self.record:
+            self.rdb.sadd("m:{}".format(self.record["mimetype"]), self.record['SHA-1'])
         if self.publish:
             self.rdb.publish(self.channel, json.dumps(self.record))
         r = self.record
