@@ -164,6 +164,10 @@ class HashLookupInsert:
             self.rdb.set("l:{}".format(self.record["MD5"]), self.record["SHA-1"])
         if "SHA-256" in self.record:
             self.rdb.set("l:{}".format(self.record["SHA-256"]), self.record["SHA-1"])
+        if "TLSH" in self.record:
+            self.rdb.set("l:{}".format(self.record["TLSH"]), self.record["SHA-1"])
+        if "SSDEEP" in self.record:
+            self.rdb.set("l:{}".format(self.record["SSDEEP"]), self.record["SHA-1"])
         self.rdb.hmset("h:{}".format(self.record["SHA-1"]), self.record)
         for parent in self.parent:
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), parent)
@@ -205,6 +209,7 @@ if __name__ == "__main__":
     h.insert()
     h = HashLookupInsert(update=True, source="lib-test", publish=True, skipexists=False)
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
+    h.add_hash(value="1536:TqAwq5L4YLfAbFlIDgCicFoYq26JNM7ML02H4SFlv6Hm:TaQ4Yxjq5dYSFlv", hashtype="ssdeep")
     h.add_parent(value="d0235872b0f5d50cd9ce789690249fac3ceb9045")
     h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="original-filename", meta_value="foobar")
     h.add_parent_meta(value="d0235872b0f5d50cd9ce789690249fac3ceb9045", meta_key="bar", meta_value="foo")
