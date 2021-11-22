@@ -12,7 +12,7 @@ A hashlookup server is a Redis-compatible datastore.
 __author__ = "Alexandre Dulaunoy"
 __copyright__ = "Copyright 2021, Alexandre Dulaunoy"
 __license__ = "AGPL License"
-__version__ = "1.0"
+__version__ = "1.1"
 
 import redis
 import time
@@ -32,6 +32,7 @@ class HashLookupInsert:
         port=6666,
     ):
         self.update = update
+        self.version = __version__
         self.parent = []
         self.parent_meta = {}
         self.children = []
@@ -144,6 +145,10 @@ class HashLookupInsert:
         else:
             return False
 
+    def get_version(self):
+        """Get current version of the hashlookup library."""
+        return self.version
+
     def insert(self):
         """Insert the record in the hashlookup store. The associated structures are updated according the hashlookup data-structure backend."""
         self.none = ""
@@ -194,6 +199,8 @@ class HashLookupInsert:
 
 if __name__ == "__main__":
     h = HashLookupInsert(update=True, source="lib-test", publish=True)
+    v = h.get_version()
+    print(f"Version used:{v}")
     h.add_hash()
     h.add_hash(value="e7793f15c2ff7e747b4bc7079f5cd4f7", hashtype="Md5")
     h.add_hash(value="732458574c63c3790cad093a36eadfb990d11ee6", hashtype="sha-1")
