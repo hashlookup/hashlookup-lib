@@ -165,6 +165,10 @@ class HashLookupInsert:
             self.rdb.delete("h:{}".format(self.record["SHA-1"]))
             if "SHA-256" in self.record:
                 self.rdb.delete("l:{}".format(self.record["SHA-256"]))
+            if "TLSH" in self.record:
+                self.rdb.delete("l:{}".format(self.record["TLSH"]))
+            if "SSDEEP" in self.record:
+                self.rdb.delete("l:{}".format(self.record["SSDEEP"]))
         if "MD5" in self.record:
             self.rdb.set("l:{}".format(self.record["MD5"]), self.record["SHA-1"])
         if "SHA-256" in self.record:
