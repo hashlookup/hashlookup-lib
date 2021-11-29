@@ -16,8 +16,15 @@
             <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
             <input id="togglestate" type="checkbox">
             <div>
+                        <a class="pdoc-button module-list-button" href="../hashlookup.html">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+  <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+</svg>                            &nbsp;hashlookup</a>
 
 
+                        <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                               pattern=".+" required>
 
 
 
@@ -57,6 +64,9 @@
                                 <a class="function" href="#HashLookupInsert.add_children">add_children</a>
                         </li>
                         <li>
+                                <a class="function" href="#HashLookupInsert.get_version">get_version</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#HashLookupInsert.insert">insert</a>
                         </li>
                 </ul>
@@ -76,7 +86,7 @@
     <main class="pdoc">
             <section>
                     <h1 class="modulename">
-hashlookup<wbr>.hashlookup    </h1>
+<a href="./../hashlookup.html">hashlookup</a><wbr>.hashlookup    </h1>
 
                         <div class="docstring"><p>Hashlookup is a library to import hashes records into a hashlookup server.</p>
 
@@ -102,7 +112,7 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Alexandre Dulaunoy&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2021, Alexandre Dulaunoy&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;AGPL License&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.1&quot;</span>
 
 <span class="kn">import</span> <span class="nn">redis</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -122,6 +132,7 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
         <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="n">update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">__version__</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
@@ -234,6 +245,10 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
+    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get current version of the hashlookup library.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+
     <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Insert the record in the hashlookup store. The associated structures are updated according the hashlookup data-structure backend.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">none</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -250,10 +265,18 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]))</span>
             <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]))</span>
         <span class="k">if</span> <span class="s2">&quot;MD5&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;MD5&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">hmset</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">sadd</span><span class="p">(</span><span class="s2">&quot;p:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="n">parent</span><span class="p">)</span>
@@ -280,6 +303,8 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">HashLookupInsert</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;lib-test&quot;</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version used:</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_hash</span><span class="p">()</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_hash</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;e7793f15c2ff7e747b4bc7079f5cd4f7&quot;</span><span class="p">,</span> <span class="n">hashtype</span><span class="o">=</span><span class="s2">&quot;Md5&quot;</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_hash</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;732458574c63c3790cad093a36eadfb990d11ee6&quot;</span><span class="p">,</span> <span class="n">hashtype</span><span class="o">=</span><span class="s2">&quot;sha-1&quot;</span><span class="p">)</span>
@@ -295,6 +320,7 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
     <span class="n">h</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">HashLookupInsert</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;lib-test&quot;</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skipexists</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_hash</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;732458574c63c3790cad093a36eadfb990d11ee6&quot;</span><span class="p">,</span> <span class="n">hashtype</span><span class="o">=</span><span class="s2">&quot;sha-1&quot;</span><span class="p">)</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">add_hash</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;1536:TqAwq5L4YLfAbFlIDgCicFoYq26JNM7ML02H4SFlv6Hm:TaQ4Yxjq5dYSFlv&quot;</span><span class="p">,</span> <span class="n">hashtype</span><span class="o">=</span><span class="s2">&quot;ssdeep&quot;</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_parent</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;d0235872b0f5d50cd9ce789690249fac3ceb9045&quot;</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_parent_meta</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;d0235872b0f5d50cd9ce789690249fac3ceb9045&quot;</span><span class="p">,</span> <span class="n">meta_key</span><span class="o">=</span><span class="s2">&quot;original-filename&quot;</span><span class="p">,</span> <span class="n">meta_value</span><span class="o">=</span><span class="s2">&quot;foobar&quot;</span><span class="p">)</span>
     <span class="n">h</span><span class="o">.</span><span class="n">add_parent_meta</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;d0235872b0f5d50cd9ce789690249fac3ceb9045&quot;</span><span class="p">,</span> <span class="n">meta_key</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">meta_value</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
@@ -328,6 +354,7 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
         <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="n">update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">__version__</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
@@ -440,6 +467,10 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
+    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get current version of the hashlookup library.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+
     <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Insert the record in the hashlookup store. The associated structures are updated according the hashlookup data-structure backend.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">none</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -456,10 +487,18 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]))</span>
             <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]))</span>
         <span class="k">if</span> <span class="s2">&quot;MD5&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;MD5&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">hmset</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">sadd</span><span class="p">(</span><span class="s2">&quot;p:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="n">parent</span><span class="p">)</span>
@@ -518,6 +557,7 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
         <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="n">update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">__version__</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
@@ -798,6 +838,28 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
 
 
                             </div>
+                            <div id="HashLookupInsert.get_version" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#HashLookupInsert.get_version">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">get_version</span><span class="signature">(self)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get current version of the hashlookup library.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Get current version of the hashlookup library.</p>
+</div>
+
+
+                            </div>
                             <div id="HashLookupInsert.insert" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#HashLookupInsert.insert">#&nbsp;&nbsp</a>
 
@@ -824,10 +886,18 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]))</span>
             <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]))</span>
         <span class="k">if</span> <span class="s2">&quot;MD5&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;MD5&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s2">&quot;SHA-256&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-256&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;TLSH&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;TLSH&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;SSDEEP&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;l:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SSDEEP&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">hmset</span><span class="p">(</span><span class="s2">&quot;h:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rdb</span><span class="o">.</span><span class="n">sadd</span><span class="p">(</span><span class="s2">&quot;p:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;SHA-1&quot;</span><span class="p">]),</span> <span class="n">parent</span><span class="p">)</span>
@@ -861,5 +931,172 @@ verify meta-field definition and ensure consistency in the key/value store.</p>
                             </div>
                 </section>
     </main>
-</body>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.type) {
+                    case "function":
+                        heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">(${doc.parameters.join(", ")})</span>`;
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.type}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
 </html>
