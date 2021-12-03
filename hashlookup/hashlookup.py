@@ -186,7 +186,7 @@ class HashLookupInsert:
         for key in self.parent_meta:
             for k in self.parent_meta[key]:
                 for kparent in k.keys():
-                    if not self.rdb.hexists(key, kparent):
+                    if not self.rdb.hexists("h:{}".format(key), kparent):
                         self.rdb.hset("h:{}".format(key), key=kparent, value=k[kparent])
         for child in self.children:
             self.rdb.sadd("c:{}".format(child), self.record["SHA-1"])
