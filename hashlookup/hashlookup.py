@@ -12,7 +12,7 @@ A hashlookup server is a Redis-compatible datastore.
 __author__ = "Alexandre Dulaunoy"
 __copyright__ = "Copyright 2021, Alexandre Dulaunoy"
 __license__ = "AGPL License"
-__version__ = "1.1"
+__version__ = "1.2"
 
 import redis
 import time
@@ -186,7 +186,8 @@ class HashLookupInsert:
         for key in self.parent_meta:
             for k in self.parent_meta[key]:
                 for kparent in k.keys():
-                    self.rdb.hset("h:{}".format(key), key=kparent, value=k[kparent])
+                    if not self.rdb.hexists(key, kparent):
+                        self.rdb.hset("h:{}".format(key), key=kparent, value=k[kparent])
         for child in self.children:
             self.rdb.sadd("c:{}".format(child), self.record["SHA-1"])
             self.rdb.sadd("p:{}".format(self.record["SHA-1"]), child)
