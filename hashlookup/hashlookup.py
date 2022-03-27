@@ -10,9 +10,9 @@ A hashlookup server is a Redis-compatible datastore.
 """
 
 __author__ = "Alexandre Dulaunoy"
-__copyright__ = "Copyright 2021, Alexandre Dulaunoy"
+__copyright__ = "Copyright 2021-2022, Alexandre Dulaunoy"
 __license__ = "AGPL License"
-__version__ = "1.3"
+__version__ = "1.4"
 
 import redis
 import time
@@ -64,7 +64,8 @@ class HashLookupInsert:
             "tar:gname",
             "tar:uname",
             "nsrl-sha256",
-            "insert-timestamp"
+            "insert-timestamp",
+            "RDS:package_id"
         ]
 
     def cleanup(self):
