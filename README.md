@@ -1,10 +1,10 @@
 # Welcome to hashlookup-lib
 
-Hashlookup is a library to import hashes records into a hashlookup server.
+Hashlookup is a library to import hashes records into a [hashlookup server](https://github.com/adulau/hashlookup-server).
 
 The library cleans up the format in the entry, do normalization such as upper-case of hex hashes, verify meta-field definition and ensure consistency in the key/value store.
 
-A hashlookup server is a Redis-compatible datastore.
+A [hashlookup server](https://github.com/adulau/hashlookup-server) is a Redis-compatible datastore to do fast-lookup on digital forensic values.
 
 # Installation
 
